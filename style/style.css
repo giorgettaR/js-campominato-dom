@@ -4,14 +4,19 @@
     padding: 0;
 }
 
+.controlBox {
+    display: flex;
+    text-align: center;
+}
+
+.result {
+    display
+}
+
 header, main {
     padding: 30px;
     text-align: center;
     background-color: blue;
-}
-
-header button {
-    margin-top: 20px;
 }
 
 .container {
@@ -20,6 +25,10 @@ header button {
     display: flex;
     flex-wrap: wrap;
     border: 1px solid black;
+}
+
+.container.gameOver {
+    pointer-events: none;
 }
 
 .cell {
@@ -45,6 +54,7 @@ header button {
 
 .cell.hit {
     background-color: black;
+    pointer-events: none;
 }
 
 .cell.hit.bomb {

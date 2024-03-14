@@ -8,12 +8,6 @@
 // La partita termina quando il giocatore clicca su una bomba o quando raggiunge il numero massimo possibile di numeri consentiti (ovvero quando ha rivelato tutte le celle che non sono bombe).
 // Al termine della partita il software deve comunicare il punteggio, cioè il numero di volte che l’utente ha cliccato su una cella che non era una bomba.
 // Attenzione che l’utente potrebbe cliccare due volte sulla stessa casella…
-// BONUS 1:
-// Se non lo avete fatto ieri aggiungete la gestione della difficoltà
-// Aggiungere una select accanto al bottone di generazione, che fornisca una scelta tra tre diversi livelli di difficoltà:
-// difficoltà 1 ⇒ 100 caselle, con un numero compreso tra 1 e 100, divise in 10 caselle per 10 righe;
-// difficoltà 2 ⇒ 81 caselle, con un numero compreso tra 1 e 81, divise in 9 caselle per 9 righe;
-// difficoltà 3 ⇒ 49 caselle, con un numero compreso tra 1 e 49, divise in 7 caselle per 7 righe;
 // BONUS 2:
 // Quando al partita termina mostrare nella griglia tutte le bombe presenti, anche quelle che non erano state trovate.
 // Tutte le caselle delle bombe devono diventare rosse
@@ -26,6 +20,7 @@ const playButtonEl = document.getElementById('playButton');
 const difficultySelectionEl = document.getElementById('difficulty');
 
 
+let points = 0;
 
 playButtonEl.addEventListener('click', function(){
     
@@ -36,32 +31,48 @@ playButtonEl.addEventListener('click', function(){
 
     if (difficulty == 'hard') {
         numOfCells = 100;
-        console.log(numOfCells)
     } else if (difficulty == 'medium'){
         numOfCells = 81;
-        console.log(numOfCells)
     } else {
         numOfCells = 49;
-        console.log(numOfCells)
     }
+
+    grid(numOfCells, difficulty);
+})
+
+// funzione per generare griglia
+
+function grid(numOfCells, difficulty){
+    
+    let points = 0;
+    gridEl.classList.remove('gameOver');
 
     // generazione array con numero celle con bomba
 
     let bombsCells = [];
-
-    while (bombsCells.length < 16) {
+    while (bombsCells.length < 40) {
         newBombCell = Math.floor(Math.random()*numOfCells) + 1;
         if (!bombsCells.includes(newBombCell)){
             bombsCells.push(newBombCell);
         }
     }
-    console.log(bombsCells)
+
+    // generazione array di controllo vincita
+
+    let freeCells = [];
+    for (let n = 1 ; n <= numOfCells; n++) {
+            freeCells.push(n);
+        }
+    freeCells= freeCells.filter((n) => !bombsCells.includes(n));
+    console.log(freeCells)
 
     // pulizia e generazione griglia
 
     gridEl.innerHTML = '';
+    const result = document.createElement('div');
+    result.classList.add('result');
 
-    for (let i = 0; i < numOfCells; i++) {
+    for (let numCell = 1; numCell < numOfCells + 1; numCell++) {
 
         // creazione e aggiunta celle
         const cellElement = document.createElement('div');
@@ -70,24 +81,54 @@ playButtonEl.addEventListener('click', function(){
 
         // creazione e aggiunta numeri
         const numElement = document.createElement('div');
-        numElement.innerHTML = i + 1;
+        numElement.innerHTML = numCell;
         cellElement.appendChild(numElement);
 
-        // aggiunta stile celle colpite
-        cellElement.addEventListener('click', function(){
-            cellElement.classList.add('hit');
-        })
-
-        // aggiunta stile celle con bomba
-        if (bombsCells.includes(i + 1)){
+        // aggiunta classe celle con bomba
+        if (bombsCells.includes(numCell)){
             cellElement.classList.add('bomb');
         }
 
+        // click su una cella
+
+        cellElement.addEventListener('click', function(){
+
+            // check fine partita
+            if (freeCells.length === 1) {
+
+                gridEl.classList.add('gameOver');
+                result.innerHTML =
+                `
+                You beat the game, GREAT JOB!
+                Your score is ${points + 1}.
+                `
+                document.querySelector('.comsBox').append(result);
+
+            } 
+
+            // cambio stile cella colpita
+            cellElement.classList.add('hit');
+            
+            // check bomba e incremento punteggio
+
+            if (bombsCells.includes(numCell)) {
+
+                gridEl.classList.add('gameOver');
+                result.innerHTML =
+                `
+                You stepped on a bomb and BLEW UP!
+                Your score is ${points}.
+                `
+                document.querySelector('.comsBox').append(result);
+
+            } else {
+                points++;
+                console.log(numCell)
+                const indexCell = freeCells.indexOf(numCell);
+                freeCells = freeCells.toSpliced(indexCell, 1);
+                console.log(freeCells)
+            }
+        })
     }
-})
+}
 
-
-
-// click sulla cella
-// cambio colore cella
-// aggiungere select che fa cambiare la griglia
