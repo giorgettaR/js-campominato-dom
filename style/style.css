@@ -9,10 +9,6 @@
     text-align: center;
 }
 
-.result {
-    display
-}
-
 header, main {
     padding: 30px;
     text-align: center;
@@ -59,4 +55,9 @@ header, main {
 
 .cell.hit.bomb {
     background-color: red;
+}
+
+.container.gameOver > .cell.bomb {
+    background-color: red;
+
 }

@@ -50,7 +50,7 @@ function grid(numOfCells, difficulty){
     // generazione array con numero celle con bomba
 
     let bombsCells = [];
-    while (bombsCells.length < 40) {
+    while (bombsCells.length < 16) {
         newBombCell = Math.floor(Math.random()*numOfCells) + 1;
         if (!bombsCells.includes(newBombCell)){
             bombsCells.push(newBombCell);
