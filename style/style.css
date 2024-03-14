@@ -1,0 +1,48 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+header, main {
+    padding: 30px;
+    text-align: center;
+    background-color: blue;
+}
+
+header button {
+    margin-top: 20px;
+}
+
+.container {
+    margin: 0 auto;
+    width: 80vw;
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid black;
+}
+
+.cell {
+    aspect-ratio: 1/1;
+    border: 1px dashed black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell.easy {
+    width: calc(100% / 7);
+}
+
+.cell.medium {
+    width: calc(100% / 9);
+}
+
+.cell.hard {
+    width: calc(100% / 10);
+}
+
+.cell.hit {
+    background-color: black;
+}
