@@ -1,8 +1,7 @@
 // Consegna
 // Copiamo la griglia fatta ieri nella nuova repo e aggiungiamo la logica del gioco (attenzione: non bisogna copiare tutta la cartella dell’esercizio ma solo l’index.html, e le cartelle js/ css/ con i relativi script e fogli di stile, per evitare problemi con l’inizializzazione di git).
 // Descrizione:
-// Il computer deve generare 16 numeri casuali nello stesso range della difficoltà prescelta: le bombe.
-// Attenzione: nella stessa cella può essere posizionata al massimo una bomba, perciò nell’array delle bombe non potranno esserci due numeri uguali.
+
 // In seguito l’utente clicca su una cella:
 // se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba - la cella si colora di rosso.
 // Altrimenti la cella cliccata si colora di azzurro e l’utente può continuare a cliccare sulle altre celle.
@@ -21,22 +20,19 @@
 // BONUS 3:
 // Una volta che la partita termina l’utente non deve più poter cliccare sulle cella, nel senso che se anche ci clicca non deve succedere niente.
 
-// click sul bottone
 
-const playButton = document.getElementById('playButton');
-
-const gridElement = document.querySelector('.container');
-
-const difficultySelectionElement = document.getElementById('difficulty');
+const gridEl = document.querySelector('.container');
+const playButtonEl = document.getElementById('playButton');
+const difficultySelectionEl = document.getElementById('difficulty');
 
 
 
-
-playButton.addEventListener('click', function(){
+playButtonEl.addEventListener('click', function(){
     
-    let difficulty = difficultySelectionElement.value;
+    // scelta difficoltà e generazione numero celle
 
-console.log(difficulty)
+    let difficulty = difficultySelectionEl.value;
+    let numOfCells;
 
     if (difficulty == 'hard') {
         numOfCells = 100;
@@ -49,26 +45,43 @@ console.log(difficulty)
         console.log(numOfCells)
     }
 
+    // generazione array con numero celle con bomba
 
+    let bombsCells = [];
 
-    gridElement.innerHTML = '';
+    while (bombsCells.length < 16) {
+        newBombCell = Math.floor(Math.random()*numOfCells) + 1;
+        if (!bombsCells.includes(newBombCell)){
+            bombsCells.push(newBombCell);
+        }
+    }
+    console.log(bombsCells)
+
+    // pulizia e generazione griglia
+
+    gridEl.innerHTML = '';
 
     for (let i = 0; i < numOfCells; i++) {
 
         // creazione e aggiunta celle
         const cellElement = document.createElement('div');
         cellElement.classList.add('cell', difficulty);
-        gridElement.appendChild(cellElement);
+        gridEl.appendChild(cellElement);
 
         // creazione e aggiunta numeri
         const numElement = document.createElement('div');
         numElement.innerHTML = i + 1;
         cellElement.appendChild(numElement);
 
-        // toggle stile celle colpite
+        // aggiunta stile celle colpite
         cellElement.addEventListener('click', function(){
-            cellElement.classList.toggle('hit');
+            cellElement.classList.add('hit');
         })
+
+        // aggiunta stile celle con bomba
+        if (bombsCells.includes(i + 1)){
+            cellElement.classList.add('bomb');
+        }
 
     }
 })

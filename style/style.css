@@ -46,3 +46,7 @@ header button {
 .cell.hit {
     background-color: black;
 }
+
+.cell.hit.bomb {
+    background-color: red;
+}
