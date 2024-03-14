@@ -4,20 +4,19 @@
     padding: 0;
 }
 
-.controlBox {
-    display: flex;
-    text-align: center;
-}
-
 header, main {
-    padding: 30px;
+    padding: 15px;
     text-align: center;
     background-color: blue;
 }
 
+.comsBox >* {
+    padding: 15px;
+}
+
 .container {
     margin: 0 auto;
-    width: 80vw;
+    width: 50vw;
     display: flex;
     flex-wrap: wrap;
     border: 1px solid black;
