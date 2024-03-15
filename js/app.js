@@ -2,6 +2,8 @@
 const gridEl = document.querySelector('.container');
 const playButtonEl = document.getElementById('playButton');
 const difficultySelectionEl = document.getElementById('difficulty');
+const resultEl = document.getElementById('result')
+
 
 
 let points = 0;
@@ -11,37 +13,42 @@ playButtonEl.addEventListener('click', function(){
     // scelta difficoltà e generazione numero celle
 
     let difficulty = difficultySelectionEl.value;
-    let numOfCells;
-
-    if (difficulty == 'hard') {
-        numOfCells = 100;
-    } else if (difficulty == 'medium'){
-        numOfCells = 81;
-    } else {
-        numOfCells = 49;
-    }
-
+    let numOfCells = getNumOfCells(difficulty);
+    
     startGame(numOfCells, difficulty);
 })
 
-// funzione per generare griglia
+// funzione per ottenere  numero celle
+
+function getNumOfCells (selection){
+    if (selection == 'hard') {
+        return 100;
+    } else if (selection == 'medium'){
+        return 81;
+    } else {
+        return 49;
+    }
+}
+
+// funzione griglia e logica di gioco
 
 function startGame(numOfCells, difficulty){
     
+    // reset
+    resultEl.innerHTML = '___';
     let points = 0;
     gridEl.classList.remove('gameOver');
+    const clickedCells = [];
 
-    const result = document.createElement('div');
-    result.classList.add('result');
+    // generazione array con numero celle bomba
 
-    // generazione array con numero celle con bomba
-
-    const numOfBombs = 16;
+    const numOfBombs = 8;
     let bombsCells = getBombsArray(numOfBombs, numOfCells);
 
     // generazione array di controllo vincita
 
     let freeCells = getFreeCellsArray(numOfCells, bombsCells)
+    console.log(freeCells)
 
 
     // pulizia e generazione griglia
@@ -69,18 +76,11 @@ function startGame(numOfCells, difficulty){
 
         cellElement.addEventListener('click', function(){
 
-            // check fine partita
-            if (freeCells.length === 1) {
+            if (clickedCells.includes(numCell)){
+                return
+            }
 
-                gridEl.classList.add('gameOver');
-                result.innerHTML =
-                `
-                You beat the game, GREAT JOB!
-                Your score is ${points + 1}.
-                `
-                document.querySelector('.comsBox').append(result);
-
-            } 
+            clickedCells.push(numCell);
 
             // cambio stile cella colpita
             cellElement.classList.add('hit');
@@ -90,28 +90,33 @@ function startGame(numOfCells, difficulty){
             if (bombsCells.includes(numCell)) {
 
                 gridEl.classList.add('gameOver');
-                result.innerHTML =
+                resultEl.innerHTML =
                 `
                 You stepped on a bomb and BLEW UP!
                 Your score is ${points}.
                 `
-                document.querySelector('.comsBox').append(result);
-
             } else {
                 points++;
-                console.log(numCell)
                 const indexCell = freeCells.indexOf(numCell);
                 freeCells = freeCells.toSpliced(indexCell, 1);
-                console.log(freeCells)
             }
+
+            // check fine partita
+            if (freeCells.length === 0) {
+
+                gridEl.classList.add('gameOver');
+                resultEl.innerHTML =
+                `
+                You beat the game, GREAT JOB!
+                You scored the maximum amount of points: ${points}.
+                `
+            } 
+
         })
     }
 }
 
-
-
-
-
+// funzioni per ottenere array celle libere e celle bombe
 
 function getBombsArray(bombs, cells) {
     let array = [];
@@ -125,7 +130,7 @@ function getBombsArray(bombs, cells) {
 }
 
 function getFreeCellsArray(numOfCells, bombsArray) {
-    array = [];
+    let array = [];
     for (let n =1; n < numOfCells; n++) {
         array.push(n);
     }
