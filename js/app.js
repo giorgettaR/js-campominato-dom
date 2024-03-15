@@ -45,12 +45,6 @@ function startGame(numOfCells, difficulty){
     const numOfBombs = 8;
     let bombsCells = getBombsArray(numOfBombs, numOfCells);
 
-    // generazione array di controllo vincita
-
-    let freeCells = getFreeCellsArray(numOfCells, bombsCells)
-    console.log(freeCells)
-
-
     // pulizia e generazione griglia
 
     for (let numCell = 1; numCell < numOfCells + 1; numCell++) {
@@ -73,7 +67,6 @@ function startGame(numOfCells, difficulty){
         // click su una cella
 
         cellElement.addEventListener('click', function(){
-
             
             // cambio stile cella colpita
             cellElement.classList.add('hit');
@@ -113,7 +106,7 @@ function startGame(numOfCells, difficulty){
     }
 }
 
-// funzioni per ottenere array celle libere e celle bombe
+// funzione array celle bombe
 
 function getBombsArray(bombs, cells) {
     let array = [];
@@ -124,13 +117,4 @@ function getBombsArray(bombs, cells) {
         }
     }
     return array;
-}
-
-function getFreeCellsArray(numOfCells, bombsArray) {
-    let array = [];
-    for (let n =1; n < numOfCells; n++) {
-        array.push(n);
-    }
-    array = array.filter((n) => !bombsArray.includes(n));
-    return array
 }
