@@ -36,7 +36,7 @@ function startGame(numOfCells, difficulty){
     
     // reset
     resultEl.innerHTML = '___';
-    let points = 0;
+    gridEl.innerHTML = '';
     gridEl.classList.remove('gameOver');
     const clickedCells = [];
 
@@ -52,8 +52,6 @@ function startGame(numOfCells, difficulty){
 
 
     // pulizia e generazione griglia
-
-    gridEl.innerHTML = '';
 
     for (let numCell = 1; numCell < numOfCells + 1; numCell++) {
 
@@ -76,12 +74,7 @@ function startGame(numOfCells, difficulty){
 
         cellElement.addEventListener('click', function(){
 
-            if (clickedCells.includes(numCell)){
-                return
-            }
-
-            clickedCells.push(numCell);
-
+            
             // cambio stile cella colpita
             cellElement.classList.add('hit');
             
@@ -93,25 +86,29 @@ function startGame(numOfCells, difficulty){
                 resultEl.innerHTML =
                 `
                 You stepped on a bomb and BLEW UP!
-                Your score is ${points}.
+                Your score is ${clickedCells.length}.
                 `
-            } else {
-                points++;
-                const indexCell = freeCells.indexOf(numCell);
-                freeCells = freeCells.toSpliced(indexCell, 1);
+                return
             }
 
-            // check fine partita
-            if (freeCells.length === 0) {
+            // contatore punteggio
 
+            if (clickedCells.includes(numCell)){
+                return
+            }
+            clickedCells.push(numCell);
+
+            // check fine partita
+
+            if (clickedCells.length === (numOfCells - numOfBombs)) {
                 gridEl.classList.add('gameOver');
                 resultEl.innerHTML =
                 `
                 You beat the game, GREAT JOB!
-                You scored the maximum amount of points: ${points}.
+                You scored the maximum amount of points: 
+                ${clickedCells.length}.
                 `
-            } 
-
+            }
         })
     }
 }
